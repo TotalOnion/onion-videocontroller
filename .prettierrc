@@ -1,0 +1,22 @@
+{
+	"useTabs": true,
+	"overrides": [
+		{
+			"files": "*.test.js",
+			"options": {
+				"semi": true
+			}
+		},
+		{
+			"files": ["*.js", "*.css", "*.scss"],
+			"options": {
+				"useTabs": true,
+				"semi": true,
+				"singleQuote": true,
+				"trailingComma": "none",
+				"tabWidth": 4,
+				"bracketSpacing": false
+			}
+		}
+	]
+}
