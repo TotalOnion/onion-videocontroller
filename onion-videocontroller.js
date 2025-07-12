@@ -107,37 +107,38 @@ export default class videoController {
 					vimeoVideo.vimeoInit(videoObject);
 				}
 			}
-			this.containerCollection[videoObject.videoid] = videoObject;
-		});
-
-		const triggers = document.querySelectorAll(`[data-triggerid=${container.dataset?.videoid}]`);
-
-		if (triggers.length === 0) {
-			this.enableDebugLogs &&
-				console.log(
-					`could not find any triggers in ${parentContainer}`
-				);
-			return;
-		}
-
-		triggers.forEach((trigger) => {
-			if (!trigger) {
-				return;
-			}
-			if (!trigger?.dataset?.triggerid) {
+			const triggers = document.querySelectorAll(`[data-triggerid='${container.dataset?.videoid}']`);
+			
+			if (triggers.length === 0) {
 				this.enableDebugLogs &&
 					console.log(
-						trigger,
-						`was missing an id so the listener could not be attached`
+						`could not find any triggers in ${parentContainer}`
 					);
 				return;
 			}
-			trigger.addEventListener('click', () => {
-				this.triggerVideo(
-					this.containerCollection[trigger.dataset.triggerid]
-				);
+	
+			triggers.forEach((trigger) => {
+				if (!trigger) {
+					return;
+				}
+				if (!trigger?.dataset?.triggerid) {
+					this.enableDebugLogs &&
+						console.log(
+							trigger,
+							`was missing an id so the listener could not be attached`
+						);
+					return;
+				}
+				trigger.addEventListener('click', () => {
+					this.triggerVideo(
+						this.containerCollection[trigger.dataset.triggerid]
+					);
+				});
 			});
+			videoObject.trigger = triggers;
+			this.containerCollection[videoObject.videoid] = videoObject;
 		});
+
 	}
 	setVideoReadyState(videoObject, isLoaded) {
 		videoObject.videoReadyState = isLoaded;
@@ -178,10 +179,6 @@ export default class videoController {
 		if (!videoObject.globalSettings) {
 			videoObject.globalSettings = this.getGlobalSettings();
 		}
-		console.log(
-			'🚀 ~ videoController ~ triggerVideo ~ videoObject:',
-			videoObject
-		);
 		this.loadingSpinner(videoObject);
 		stopVideos(videoObject);
 		switch (videoObject.videotype) {
