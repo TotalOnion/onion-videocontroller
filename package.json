@@ -1,6 +1,6 @@
 {
 	"name": "@total_onion/onion-videocontroller",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Video controller utility",
 	"main": "cblvideocontroller.js",
 	"scripts": {

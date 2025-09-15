@@ -12,7 +12,7 @@ export default class videoController {
 			playingState: false,
 			playingStateClass: 'video-playing',
 			originDomain: globalThis.location?.origin,
-			enableDebugLogs: false,
+			enableDebugLogs: true,
 			isMobileSize: window.innerWidth < SRC_BREAKPOINT
 		};
 		if (parentContainer) {
@@ -45,11 +45,7 @@ export default class videoController {
 	 * @param {array} triggers - The triggers you want to add to the controller
 	 * @param {HTMLElement} parentContainer - The parent container of the video containers/triggers
 	 */
-	setVideoObjects(
-		videoReadyState,
-		videoContainers,
-		parentContainer
-	) {
+	setVideoObjects(videoReadyState, videoContainers, parentContainer) {
 		this.enableDebugLogs && console.log('Setting video Objects');
 		if (!videoContainers) {
 			this.enableDebugLogs &&
@@ -80,9 +76,7 @@ export default class videoController {
 				modal: Number(container.dataset?.modal),
 				isAdmin: isWpAdmin(),
 				fullscreen: Number(container.dataset?.fullscreen),
-				autoplay: this.globalSettings.isMobileSize
-					? Number(container.dataset?.autoplayMobile) || 0
-					: Number(container.dataset?.autoplay) || 0,
+				autoplay: this.setVideoAutoplay(container),
 				controls: Number(container.dataset?.controls),
 				loop: Number(container.dataset?.loop) || 0,
 				muted: Number(container.dataset?.muted) || 0,
@@ -93,6 +87,7 @@ export default class videoController {
 				instance: this,
 				globalSettings: this.getGlobalSettings()
 			};
+
 			if (!videoObject.videoReadyState) {
 				if (videoObject.autoplay == 1) {
 					this.loadingSpinner(videoObject);
@@ -107,8 +102,10 @@ export default class videoController {
 					vimeoVideo.vimeoInit(videoObject);
 				}
 			}
-			const triggers = document.querySelectorAll(`[data-triggerid='${container.dataset?.videoid}']`);
-			
+			const triggers = document.querySelectorAll(
+				`[data-triggerid='${container.dataset?.videoid}']`
+			);
+
 			if (triggers.length === 0) {
 				this.enableDebugLogs &&
 					console.log(
@@ -116,7 +113,7 @@ export default class videoController {
 					);
 				return;
 			}
-	
+
 			triggers.forEach((trigger) => {
 				if (!trigger) {
 					return;
@@ -138,10 +135,18 @@ export default class videoController {
 			videoObject.trigger = triggers;
 			this.containerCollection[videoObject.videoid] = videoObject;
 		});
-
 	}
 	setVideoReadyState(videoObject, isLoaded) {
 		videoObject.videoReadyState = isLoaded;
+	}
+	setVideoAutoplay(container) {
+		if (document.body.classList.contains('wp-admin')) {
+			return 0;
+		}
+
+		return this.globalSettings.isMobileSize
+			? Number(container.dataset?.autoplayMobile) || 0
+			: Number(container.dataset?.autoplay) || 0;
 	}
 	/**
 	 * Method to return the global settings for the video controller.
