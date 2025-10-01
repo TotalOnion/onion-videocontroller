@@ -12,7 +12,7 @@ export default class videoController {
 			playingState: false,
 			playingStateClass: 'video-playing',
 			originDomain: globalThis.location?.origin,
-			enableDebugLogs: true,
+			enableDebugLogs: false,
 			isMobileSize: window.innerWidth < SRC_BREAKPOINT
 		};
 		if (parentContainer) {
