@@ -1,0 +1,30 @@
+@use '../../breakpoints';
+@use 'sass:math';
+
+@function fontSize($size-px, $screen: '') {
+	@if $screen == 'static' {
+		@return calc(
+			(
+					($size-px / var(--desktop-design-reference)) *
+						var(--screen-width-static)
+				) * var(--font-size-multiplier)
+		);
+	} @else {
+		@return calc(
+			(($size-px / var(--design-reference)) * var(--font-reference)) *
+				var(--font-size-multiplier)
+		);
+	}
+}
+@function fluidSize($size-px, $screen: '') {
+	@if $screen == 'static' {
+		@return calc(
+			(($size-px / var(--desktop-design-reference))) *
+				var(--screen-width-static)
+		);
+	} @else {
+		@return calc(
+			(($size-px / var(--design-reference)) * var(--screen-width))
+		);
+	}
+}

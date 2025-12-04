@@ -1,0 +1,744 @@
+@use '../../breakpoints';
+@use '../fields-core-functions-v3/core-functions-v3';
+@use 'sass:math';
+
+@mixin textStyle() {
+	font-weight: var(--font-weight, var(--default-font-weight));
+	text-align: var(--text-align);
+	text-transform: var(--text-transform);
+	color: var(--text-colour);
+}
+
+@mixin device($size: '768px', $type: 'min-width') {
+	// @container (min-width: #{$size}) {
+	// 	@content;
+	// }
+	@media screen and (#{$type}: #{$size}) {
+		@content;
+	}
+}
+
+@mixin defaultThemeTextColours() {
+	color: var(--default-text-colour-mobile, var(--theme-primary-text-colour));
+
+	@include device(breakpoints.$tabPortrait) {
+		color: var(
+			--default-text-colour-portrait,
+			var(--default-text-colour-desktop)
+		);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		color: var(
+			--default-text-colour-desktop,
+			var(--theme-primary-text-colour)
+		);
+	}
+}
+@mixin defaultTextTransform() {
+	text-transform: var(--default-text-transform-mobile);
+
+	@include device(breakpoints.$tabPortrait) {
+		text-transform: var(
+			--default-text-transform-portrait,
+			var(--default-text-transform-desktop)
+		);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		text-transform: var(--default-text-transform-desktop);
+	}
+}
+@mixin defaultTextAlign() {
+	text-align: var(--default-text-align-mobile);
+
+	@include device(breakpoints.$tabPortrait) {
+		text-align: var(
+			--default-text-align-portrait,
+			var(--default-text-align-desktop)
+		);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		text-align: var(--default-text-align-desktop);
+	}
+}
+@mixin defaultFontWeight() {
+	font-weight: var(--default-font-weight-mobile, var(--default-font-weight));
+
+	@include device(breakpoints.$tabPortrait) {
+		font-weight: var(
+			--default-font-weight-portrait,
+			var(--default-font-weight)
+		);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		font-weight: var(
+			--default-font-weight-desktop,
+			var(--default-font-weight)
+		);
+	}
+}
+
+@mixin defaultFontStyle() {
+	font-style: var(--default-font-style-mobile);
+
+	@include device(breakpoints.$tabPortrait) {
+		font-style: var(
+			--default-font-style-portrait,
+			var(--default-font-style-desktop)
+		);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		font-style: var(--default-font-style-desktop);
+	}
+}
+
+@mixin contentMaxWidth() {
+	@include device(breakpoints.$tabLandscape) {
+		max-width: var(--global-content-max-width);
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+@mixin responsiveShowHide($defaultDisplay: block) {
+	display: var(--display-mobile, $defaultDisplay);
+
+	@include device(breakpoints.$tabPortrait) {
+		display: var(--display-portrait, $defaultDisplay);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		display: var(--display-desktop, $defaultDisplay);
+	}
+}
+
+@mixin lockPosition() {
+	overflow: hidden;
+	touch-action: none;
+	-webkit-overflow-scrolling: none;
+	overscroll-behavior: none;
+}
+
+@mixin contentImage() {
+	place-self: var(--image-position-vertical) var(--image-position-horizontal);
+	width: 100%;
+	translate: var(--image-position-offset-horizontal)
+		var(--image-position-offset-vertical);
+	rotate: var(--image-rotation);
+	z-index: -1;
+	border-radius: var(--content-image-border-radius);
+	max-width: core-functions-v3.fluidSize(
+		var(--image-max-width-mobile),
+		'portrait'
+	);
+
+	@include device(breakpoints.$tabPortrait) {
+		max-width: core-functions-v3.fluidSize(
+			var(--image-max-width-portrait),
+			'portrait'
+		);
+	}
+
+	@include device(breakpoints.$tabLandscape) {
+		max-width: core-functions-v3.fluidSize(
+			var(--image-max-width-landscape),
+			'landscape'
+		);
+	}
+
+	@include device(breakpoints.$desktop) {
+		max-width: core-functions-v3.fluidSize(
+			var(--image-max-width-desktop),
+			'desktop'
+		);
+	}
+}
+
+@mixin boxShadow() {
+	box-shadow: core-functions-v3.fluidSize(
+			var(--box-shadow-offset-x),
+			'static'
+		)
+		core-functions-v3.fluidSize(var(--box-shadow-offset-y), 'static')
+		core-functions-v3.fluidSize(var(--box-shadow-blur), 'static')
+		core-functions-v3.fluidSize(var(--box-shadow-spread), 'static')
+		var(--box-shadow-colour) var(--box-shadow-position);
+	&:hover {
+		box-shadow: core-functions-v3.fluidSize(
+				var(--box-shadow-hover-offset-x),
+				'static'
+			)
+			core-functions-v3.fluidSize(
+				var(--box-shadow-hover-offset-y),
+				'static'
+			)
+			core-functions-v3.fluidSize(var(--box-shadow-hover-blur), 'static')
+			core-functions-v3.fluidSize(
+				var(--box-shadow-hover-spread),
+				'static'
+			)
+			var(--box-shadow-hover-colour) var(--box-shadow-hover-position);
+	}
+}
+
+@mixin textShadow() {
+	text-shadow: core-functions-v3.fluidSize(
+			var(--text-shadow-offset-x),
+			'static'
+		)
+		core-functions-v3.fluidSize(var(--text-shadow-offset-y), 'static')
+		core-functions-v3.fluidSize(var(--text-shadow-blur), 'static')
+		var(--text-shadow-colour);
+}
+
+//Typography Mixins
+// @mixin h1-l {
+// 	letter-spacing: var(--h1-l-letter-spacing);
+// 	line-height: var(--h1-l-line-height);
+// 	font-family: var(--h1-l-font-family);
+// 	--default-font-weight: var(--h1-l-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h1-l-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-xl-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h1-l-mobile), 'mobile'),
+// 		var(--h-xl-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-xl-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h1-l-portrait), 'portrait'),
+// 			var(--h-xl-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-xl-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h1-l-landscape), 'landscape'),
+// 			var(--h-xl-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-xl-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h1-l-desktop), 'desktop'),
+// 			var(--h-xl-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin h1 {
+// 	letter-spacing: var(--h1-letter-spacing);
+// 	line-height: var(--h1-line-height);
+// 	font-family: var(--h1-font-family);
+// 	--default-font-weight: var(--h1-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h1-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-l-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h1-mobile), 'mobile'),
+// 		var(--h-l-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-l-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h1-portrait), 'portrait'),
+// 			var(--h-l-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-l-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h1-landscape), 'landscape'),
+// 			var(--h-l-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-l-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h1-desktop), 'desktop'),
+// 			var(--h-l-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin h2 {
+// 	letter-spacing: var(--h2-letter-spacing);
+// 	line-height: var(--h2-line-height);
+// 	font-family: var(--h2-font-family);
+// 	--default-font-weight: var(--h2-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h2-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-m-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h2-mobile), 'mobile'),
+// 		var(--h-m-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-m-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h2-portrait), 'portrait'),
+// 			var(--h-m-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-m-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h2-landscape), 'landscape'),
+// 			var(--h-m-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-m-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h2-desktop), 'desktop'),
+// 			var(--h-m-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin h3 {
+// 	letter-spacing: var(--h3-letter-spacing);
+// 	line-height: var(--h3-line-height);
+// 	font-family: var(--h3-font-family);
+// 	--default-font-weight: var(--h3-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h3-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-s-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h3-mobile), 'mobile'),
+// 		var(--h-s-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-s-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h3-portrait), 'portrait'),
+// 			var(--h-s-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-s-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h3-landscape), 'landscape'),
+// 			var(--h-s-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-s-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h3-desktop), 'desktop'),
+// 			var(--h-s-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin h4 {
+// 	letter-spacing: var(--h4-letter-spacing);
+// 	line-height: var(--h4-line-height);
+// 	font-family: var(--h4-font-family);
+// 	--default-font-weight: var(--h4-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h4-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-xs-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h4-mobile), 'mobile'),
+// 		var(--h-xs-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-xs-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h4-portrait), 'portrait'),
+// 			var(--h-xs-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-xs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h4-landscape), 'landscape'),
+// 			var(--h-xs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-xs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h4-desktop), 'desktop'),
+// 			var(--h-xs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin h5 {
+// 	letter-spacing: var(--h5-letter-spacing);
+// 	line-height: var(--h5-line-height);
+// 	font-family: var(--h5-font-family);
+// 	--default-font-weight: var(--h5-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h5-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-xxs-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h5-mobile), 'mobile'),
+// 		var(--h-xxs-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-xxs-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h5-portrait), 'portrait'),
+// 			var(--h-xxs-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-xxs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h5-landscape), 'landscape'),
+// 			var(--h-xxs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-xxs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h5-desktop), 'desktop'),
+// 			var(--h-xxs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin h6 {
+// 	letter-spacing: var(--h6-letter-spacing);
+// 	line-height: var(--h6-line-height);
+// 	font-family: var(--h6-font-family);
+// 	--default-font-weight: var(--h6-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--h6-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--h-xxxs-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--h6-mobile), 'mobile'),
+// 		var(--h-xxxs-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--h-xxxs-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--h6-portrait), 'portrait'),
+// 			var(--h-xxxs-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--h-xxxs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h6-landscape), 'landscape'),
+// 			var(--h-xxxs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--h-xxxs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--h6-desktop), 'desktop'),
+// 			var(--h-xxxs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin sh1 {
+// 	letter-spacing: var(--sh1-letter-spacing);
+// 	line-height: var(--sh1-line-height);
+// 	font-family: var(--sh1-font-family);
+// 	--default-font-weight: var(--sh1-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--sh1-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--sh-xl-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--sh1-mobile), 'mobile'),
+// 		var(--sh-xl-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--sh-xl-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--sh1-portrait), 'portrait'),
+// 			var(--sh-xl-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--sh-xl-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh1-landscape), 'landscape'),
+// 			var(--sh-xl-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--sh-xl-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh1-desktop), 'desktop'),
+// 			var(--sh-xl-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin sh2 {
+// 	letter-spacing: var(--sh2-letter-spacing);
+// 	line-height: var(--sh2-line-height);
+// 	font-family: var(--sh2-font-family);
+// 	--default-font-weight: var(--sh2-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--sh2-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--sh-l-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--sh2-mobile), 'mobile'),
+// 		var(--sh-l-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--sh-l-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--sh2-portrait), 'portrait'),
+// 			var(--sh-l-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--sh-l-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh2-landscape), 'landscape'),
+// 			var(--sh-l-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--sh-l-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh2-desktop), 'desktop'),
+// 			var(--sh-l-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin sh3 {
+// 	letter-spacing: var(--sh3-letter-spacing);
+// 	line-height: var(--sh3-line-height);
+// 	font-family: var(--sh3-font-family);
+// 	--default-font-weight: var(--sh3-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--sh3-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--sh-m-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--sh3-mobile), 'mobile'),
+// 		var(--sh-m-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--sh-m-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--sh3-portrait), 'portrait'),
+// 			var(--sh-m-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--sh-m-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh3-landscape), 'landscape'),
+// 			var(--sh-m-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--sh-m-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh3-desktop), 'desktop'),
+// 			var(--sh-m-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin sh4 {
+// 	letter-spacing: var(--sh4-letter-spacing);
+// 	line-height: var(--sh4-line-height);
+// 	font-family: var(--sh4-font-family);
+// 	--default-font-weight: var(--sh4-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--sh4-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--sh-s-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--sh4-mobile), 'mobile'),
+// 		var(--sh-s-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--sh-s-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--sh4-portrait), 'portrait'),
+// 			var(--sh-s-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--sh-s-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh4-landscape), 'landscape'),
+// 			var(--sh-s-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--sh-s-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh4-desktop), 'desktop'),
+// 			var(--sh-s-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin sh5 {
+// 	letter-spacing: var(--sh5-letter-spacing);
+// 	line-height: var(--sh5-line-height);
+// 	font-family: var(--sh5-font-family);
+// 	--default-font-weight: var(--sh5-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--sh5-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--sh-xs-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--sh5-mobile), 'mobile'),
+// 		var(--sh-xs-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--sh-xs-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--sh5-portrait), 'portrait'),
+// 			var(--sh-xs-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--sh-xs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh5-landscape), 'landscape'),
+// 			var(--sh-xs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--sh-xs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh5-desktop), 'desktop'),
+// 			var(--sh-xs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
+// @mixin sh6 {
+// 	letter-spacing: var(--sh6-letter-spacing);
+// 	line-height: var(--sh6-line-height);
+// 	font-family: var(--sh6-font-family);
+// 	--default-font-weight: var(--sh6-default-font-weight);
+// 	font-weight: var(--default-font-weight);
+
+// 	strong,
+// 	b {
+// 		font-weight: var(--sh6-bold-font-weight);
+// 	}
+
+// 	font-size: clamp(
+// 		var(--sh-xxs-font-size-min-mobile, 10px),
+// 		core-functions-v3.fontSize(var(--sh6-mobile), 'mobile'),
+// 		var(--sh-xxs-font-size-max-mobile, 180px)
+// 	);
+
+// 	@include device(breakpoints.$tabPortrait) {
+// 		font-size: clamp(
+// 			var(--sh-xxs-font-size-min-mobile, 10px),
+// 			core-functions-v3.fontSize(var(--sh6-portrait), 'portrait'),
+// 			var(--sh-xxs-font-size-max-mobile, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$tabLandscape) {
+// 		font-size: clamp(
+// 			var(--sh-xxs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh6-landscape), 'landscape'),
+// 			var(--sh-xxs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+
+// 	@include device(breakpoints.$desktop) {
+// 		font-size: clamp(
+// 			var(--sh-xxs-font-size-min-desktop, 10px),
+// 			core-functions-v3.fontSize(var(--sh6-desktop), 'desktop'),
+// 			var(--sh-xxs-font-size-max-desktop, 180px)
+// 		);
+// 	}
+// }
