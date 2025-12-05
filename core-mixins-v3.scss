@@ -1,5 +1,5 @@
-@use '../../breakpoints';
-@use '../fields-core-functions-v3/core-functions-v3';
+@use './breakpoints';
+@use './core-functions-v3';
 @use 'sass:math';
 
 @mixin textStyle() {
