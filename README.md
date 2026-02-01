@@ -1,4 +1,4 @@
-# cblvideocontroller
+# onion-videocontroller
 
 Multi format video player with optional modal pop up.
 The videocontroller houses multiple video implementations as modules which it calls upon depending on the type of video the user wishes to play. This way all the necessary code plus lazyloading optimisations can be implemented separately for each video type.
@@ -6,18 +6,18 @@ Given that the videocontroller builds a dictionary of all the video containers a
 
 ## Install via npm or yarn with:
 
-`npm install @pernod-ricard-global-cms/cblvideocontroller`
+`npm install @pernod-ricard-global-cms/onion-videocontroller`
 or
-`yarn add @pernod-ricard-global-cms/cblvideocontroller`
+`yarn add @pernod-ricard-global-cms/onion-videocontroller`
 
 ## Import the module in your js file with:
 
-`import cblvideocontroller from '@pernod-ricard-global-cms/cblvideocontroller';`
+`import onion-videocontroller from '@pernod-ricard-global-cms/onion-videocontroller';`
 
 Instantiate the class in your js file and pass a reference to an html element that is a parent of the video container.
 In a typical cbl block js file this would be the block element, so it might look something like this.
 
-`const videoController = new cblvideocontroller(block);`
+`const videoController = new onion-videocontroller(block);`
 
 ## HTML/Twig
 
@@ -59,13 +59,13 @@ eg:
 
 You can choose to do all the styling yourself in which case there is nothing left to import. However, there are some basic styles exported as mixins which are very easy to override and can get you to a workable result very quickly. You can import them directly from the package folder into your scss file and then include the mixin in the scope of your parent block class.
 
-`@use 'NodeModules/@pernod-ricard-global-cms/cblvideocontroller/vc-styles';`
+`@use 'NodeModules/@pernod-ricard-global-cms/onion-videocontroller/vc-styles';`
 
 `.parent-block-class { @include vc-styles.basic(); }`
 
 There is also a mixin for adding default styling to the pop up modal which can be very handy. You can import that in a similar way, only this time it should be scoped to the html. The modal will be added and removed from the body tag, but overflow will need to added to the html in order to prevent scrolling. This is all build in to the modal styles
 
-`@use 'NodeModules/@pernod-ricard-global-cms/cblvideocontroller/vc-styles';`
+`@use 'NodeModules/@pernod-ricard-global-cms/onion-videocontroller/vc-styles';`
 
 `html { @include vc-styles.modal(); }`
 
@@ -76,13 +76,14 @@ It is recommended to use this field group as otherwise some of the features of t
 
 ## Other useful features
 
-Because it works as a singleton you can instantiate the videocontroller anywhere in your site and access some global methods. 
-Eg. Anywhere in the javascript on the page you can do, 
+Because it works as a singleton you can instantiate the videocontroller anywhere in your site and access some global methods.
+Eg. Anywhere in the javascript on the page you can do,
 
 `const videoController = new videcontroller();`
 `videoController.stopAllVideos();`
 
-These methods include: 
-- stopAllVideos(): This will stop all the videos on the page except for ones that have been assigned to autoplay. 
+These methods include:
+
+- stopAllVideos(): This will stop all the videos on the page except for ones that have been assigned to autoplay.
 - getGlobalSettings(): Returns the global videcontroller settings.
 - getObjects(): Returns the collection of video containers and triggers that have been found by the controller.

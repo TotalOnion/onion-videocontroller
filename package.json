@@ -1,21 +1,21 @@
 {
 	"name": "@total_onion/onion-videocontroller",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "Video controller utility",
-	"main": "cblvideocontroller.js",
+	"main": "onion-videocontroller.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Chivas-Brothers/cblvideocontroller.git"
+		"url": "git+https://github.com/TotalOnion/onion-videocontroller.git"
 	},
 	"author": "Ciaran",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/Chivas-Brothers/cblvideocontroller/issues"
+		"url": "https://github.com/TotalOnion/onion-videocontroller/issues"
 	},
-	"homepage": "https://github.com/Chivas-Brothers/cblvideocontroller#readme",
+	"homepage": "https://github.com/TotalOnion/onion-videocontroller#readme",
 	"dependencies": {
 		"@vimeo/player": "^2.16.4",
 		"prettier": "^2.6.2"
