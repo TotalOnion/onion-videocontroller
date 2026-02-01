@@ -73,6 +73,7 @@ export default class videoController {
 				vimeoplayer: false,
 				parentcontainer: parentContainer,
 				modalcontainer: '',
+				dataLayerPush: container.dataset.datalayerpush,
 				modal: Number(container.dataset?.modal),
 				isAdmin: isWpAdmin(),
 				fullscreen: Number(container.dataset?.fullscreen),

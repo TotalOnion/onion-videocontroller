@@ -1,5 +1,12 @@
 const enableDebugLogs = false;
 
+export function dataLayerPush(action = { name: "", value: "" }) {
+	console.log(
+		"pushing to data layer (test) " + action.name + " " + action.value
+	);
+	// window.dataLayer = window.dataLayer || [];
+	// window.dataLayer.push({ [action.name]: action.value });
+}
 export function generateModal(videoObject) {
 	const { videocontainer, elementType } = videoObject;
 	let videoElementType = "";

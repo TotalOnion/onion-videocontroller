@@ -4,6 +4,7 @@ import {
 	generateModal,
 	resizeDebouncer,
 	stopVideos,
+	dataLayerPush,
 } from "./vcUtils.mjs";
 
 function uploadedVideoInit(videoObject) {
@@ -43,6 +44,14 @@ function uploadedVideoInit(videoObject) {
 		videoObject.instance.setVideoReadyState(videoObject, true);
 		stopVideos(videoObject);
 		revealVideoElement(videoObject, false);
+		if (videoObject.dataLayerPush) {
+			dataLayerPush({ name: "play", value: "video play" });
+		}
+	});
+	videoPlayer.addEventListener("pause", () => {
+		if (videoObject.dataLayerPush) {
+			dataLayerPush({ name: "pause", value: "video paused" });
+		}
 	});
 
 	videoPlayer.addEventListener("ended", () => {
@@ -52,9 +61,15 @@ function uploadedVideoInit(videoObject) {
 			}
 		}
 		hideVideoElement(videoObject);
+		if (videoObject.dataLayerPush) {
+			dataLayerPush({ name: "ended", value: "video ended" });
+		}
 	});
 	if (videoObject.autoplay && videoObject.muted) {
 		triggerUploadedVideo(videoObject);
+		if (videoObject.dataLayerPush) {
+			dataLayerPush({ name: "autoplaying", value: "video autoplay" });
+		}
 	}
 }
 function triggerUploadedVideo(videoObject) {
