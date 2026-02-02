@@ -22,6 +22,7 @@ function uploadedVideoInit(videoObject) {
 	const videoPlayer = videocontainer.querySelector(
 		".cblvc-video-container__video-player"
 	);
+	videoObject.videoplayer = videoPlayer;
 	videoObject.elementType = "video";
 	if (loop) {
 		videoPlayer.setAttribute("loop", true);
@@ -45,12 +46,13 @@ function uploadedVideoInit(videoObject) {
 		stopVideos(videoObject);
 		revealVideoElement(videoObject, false);
 		if (videoObject.dataLayerPush) {
-			dataLayerPush({ name: "play", value: "video play" });
+			dataLayerPush({ eventname: "play", videoObject });
 		}
 	});
-	videoPlayer.addEventListener("pause", () => {
+	videoPlayer.addEventListener("pause", (e) => {
+		const target = e.target;
 		if (videoObject.dataLayerPush) {
-			dataLayerPush({ name: "pause", value: "video paused" });
+			dataLayerPush({ eventname: "pause", videoObject });
 		}
 	});
 
@@ -62,14 +64,42 @@ function uploadedVideoInit(videoObject) {
 		}
 		hideVideoElement(videoObject);
 		if (videoObject.dataLayerPush) {
-			dataLayerPush({ name: "ended", value: "video ended" });
+			dataLayerPush({ eventname: "ended", videoObject });
 		}
 	});
+
+	let quarterFired = false;
+	let halfwayFired = false;
+	let threeQuartersFired = false;
+	videoPlayer.addEventListener("timeupdate", () => {
+		if (
+			!quarterFired &&
+			videoPlayer.currentTime >= videoPlayer.duration * 0.25
+		) {
+			quarterFired = true;
+			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "progress", videoObject });
+			}
+		}
+		if (!halfwayFired && videoPlayer.currentTime >= videoPlayer.duration / 2) {
+			halfwayFired = true;
+			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "progress", videoObject });
+			}
+		}
+		if (
+			!threeQuartersFired &&
+			videoPlayer.currentTime >= videoPlayer.duration * 0.75
+		) {
+			threeQuartersFired = true;
+			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "progress", videoObject });
+			}
+		}
+	});
+
 	if (videoObject.autoplay && videoObject.muted) {
 		triggerUploadedVideo(videoObject);
-		if (videoObject.dataLayerPush) {
-			dataLayerPush({ name: "autoplaying", value: "video autoplay" });
-		}
 	}
 }
 function triggerUploadedVideo(videoObject) {

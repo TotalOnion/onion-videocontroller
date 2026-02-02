@@ -1,11 +1,62 @@
 const enableDebugLogs = false;
 
-export function dataLayerPush(action = { name: "", value: "" }) {
-	console.log(
-		"pushing to data layer (test) " + action.name + " " + action.value
-	);
-	// window.dataLayer = window.dataLayer || [];
-	// window.dataLayer.push({ [action.name]: action.value });
+export function dataLayerPush(eventData = { eventname: "", videoObject }) {
+	let currentTime = eventData.videoObject?.videoplayer?.currentTime;
+	let duration = eventData.videoObject?.videoplayer?.duration;
+	const timeDiv = Math.floor((currentTime / duration) * 100);
+	let percent;
+	if (timeDiv < 25 || !duration) {
+		percent = 0;
+	}
+	if (timeDiv >= 25 && timeDiv < 50) {
+		percent = 25;
+	}
+	if (timeDiv >= 50 && timeDiv < 75) {
+		percent = 50;
+	}
+	if (timeDiv >= 75 && timeDiv < 100) {
+		percent = 75;
+	}
+
+	if (currentTime == duration) {
+		percent = 100;
+	}
+	let src = eventData.videoObject?.videoplayer?.src;
+	let status = eventData.eventname == "play" ? "start" : eventData.eventname;
+	let autoplay = eventData.videoObject.autoplay;
+	let title = src?.split("/").pop();
+	let provider;
+	if (eventData.eventname == "pause" && currentTime == duration) {
+		return;
+	}
+	if (eventData.videoObject.videoplayer.src.includes("imagekit")) {
+		provider = "ImageKit";
+	}
+
+	if (eventData.videoObject.videoplayer.src.includes("youtube")) {
+		provider = "YouTube";
+	}
+
+	if (eventData.videoObject.videoplayer.src.includes("vimeo")) {
+		provider = "Vimeo";
+	}
+
+	const dataObj = {
+		event: "gcms_video",
+		video_title: title,
+		video_status: status,
+		video_provider: provider,
+		video_url: src,
+		video_percent: percent,
+		video_visible: true,
+		video_current_time: currentTime,
+		video_duration: duration,
+		video_autoplay: autoplay,
+	};
+
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push(dataObj);
+	console.log("🚀 ~ dataLayerPush ~ dataObj:", dataObj);
 }
 export function generateModal(videoObject) {
 	const { videocontainer, elementType } = videoObject;

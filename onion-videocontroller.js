@@ -69,6 +69,7 @@ export default class videoController {
 				videotype: container.dataset?.videotype,
 				videoid: container.dataset?.videoid,
 				videoReadyState: videoReadyState,
+				videoplayer: false,
 				youtubeplayer: false,
 				vimeoplayer: false,
 				parentcontainer: parentContainer,
