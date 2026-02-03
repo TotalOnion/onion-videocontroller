@@ -1,4 +1,4 @@
-const enableDebugLogs = false;
+const enableDebugLogs = true;
 
 export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 	let currentTime = eventData.videoObject?.videoplayer?.currentTime;
@@ -22,10 +22,16 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 		percent = 100;
 	}
 	let src = eventData.videoObject?.videoplayer?.src;
-	let status = eventData.eventname == "play" ? "start" : eventData.eventname;
+	let status = eventData.eventname;
+	if (eventData.eventname == "play") {
+		status = "start";
+	}
+	if (eventData.eventname == "ended") {
+		status = "complete";
+	}
 	let autoplay = eventData.videoObject.autoplay;
 	let title = src?.split("/").pop();
-	let provider;
+	let provider = "MediaLibrary";
 	if (eventData.eventname == "pause" && currentTime == duration) {
 		return;
 	}
@@ -51,12 +57,12 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 		video_visible: true,
 		video_current_time: currentTime,
 		video_duration: duration,
-		video_autoplay: autoplay,
+		video_autoplay: autoplay ? true : false,
 	};
 
 	window.dataLayer = window.dataLayer || [];
 	window.dataLayer.push(dataObj);
-	console.log("🚀 ~ dataLayerPush ~ dataObj:", dataObj);
+	enableDebugLogs && console.log("🚀 ~ dataLayerPush ~ dataObj:", dataObj);
 }
 export function generateModal(videoObject) {
 	const { videocontainer, elementType } = videoObject;
