@@ -41,15 +41,15 @@ function uploadedVideoInit(videoObject) {
 		videoPlayer.removeAttribute("playsinline");
 	}
 
-	// videoPlayer.addEventListener("durationchange", () => {
-	// 	console.log('duration change');
-	// });
 	videoPlayer.addEventListener("play", () => {
 		videoObject.instance.setVideoReadyState(videoObject, true);
 		stopVideos(videoObject);
 		revealVideoElement(videoObject, false);
 		if (videoObject.dataLayerPush) {
-			dataLayerPush({ eventname: "play", videoObject });
+			videoPlayer.addEventListener("durationchange", () => {
+				console.log("duration change");
+				dataLayerPush({ eventname: "play", videoObject });
+			});
 		}
 	});
 	videoPlayer.addEventListener("pause", (e) => {
