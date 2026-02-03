@@ -41,6 +41,9 @@ function uploadedVideoInit(videoObject) {
 		videoPlayer.removeAttribute("playsinline");
 	}
 
+	// videoPlayer.addEventListener("durationchange", () => {
+	// 	console.log('duration change');
+	// });
 	videoPlayer.addEventListener("play", () => {
 		videoObject.instance.setVideoReadyState(videoObject, true);
 		stopVideos(videoObject);
@@ -71,6 +74,7 @@ function uploadedVideoInit(videoObject) {
 	let quarterFired = false;
 	let halfwayFired = false;
 	let threeQuartersFired = false;
+	let completedFired = false;
 	videoPlayer.addEventListener("timeupdate", () => {
 		if (
 			!quarterFired &&
@@ -93,6 +97,13 @@ function uploadedVideoInit(videoObject) {
 		) {
 			threeQuartersFired = true;
 			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "progress", videoObject });
+			}
+		}
+		if (quarterFired && !completedFired && videoPlayer.currentTime < 0.2) {
+			completedFired = true;
+			if (videoObject.dataLayerPush) {
+				videoObject.completed = true;
 				dataLayerPush({ eventname: "progress", videoObject });
 			}
 		}

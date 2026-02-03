@@ -7,6 +7,9 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 	let percent;
 	if (timeDiv < 25 || !duration) {
 		percent = 0;
+		if (eventData.videoObject.completed == true) {
+			percent = 100;
+		}
 	}
 	if (timeDiv >= 25 && timeDiv < 50) {
 		percent = 25;
@@ -17,10 +20,10 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 	if (timeDiv >= 75 && timeDiv < 100) {
 		percent = 75;
 	}
-
 	if (currentTime == duration) {
 		percent = 100;
 	}
+
 	let src = eventData.videoObject?.videoplayer?.src;
 	let status = eventData.eventname;
 	if (eventData.eventname == "play") {
@@ -29,7 +32,8 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 	if (eventData.eventname == "ended") {
 		status = "complete";
 	}
-	let autoplay = eventData.videoObject.autoplay;
+	const autoplay = eventData.videoObject.autoplay;
+	const loop = eventData.videoObject.loop;
 	let title = src?.split("/").pop();
 	let provider = "MediaLibrary";
 	if (eventData.eventname == "pause" && currentTime == duration) {
@@ -58,6 +62,7 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 		video_current_time: currentTime,
 		video_duration: duration,
 		video_autoplay: autoplay ? true : false,
+		video_loop: loop ? true : false,
 	};
 
 	window.dataLayer = window.dataLayer || [];
