@@ -1,8 +1,38 @@
 const enableDebugLogs = true;
 
 export function dataLayerPush(eventData = { eventname: "", videoObject }) {
-	let currentTime = eventData.videoObject?.videoplayer?.currentTime;
-	let duration = eventData.videoObject?.videoplayer?.duration;
+	console.log(
+		"🚀 ~ dataLayerPush ~ eventData.videoObject:",
+		eventData.videoObject
+	);
+	const videoType = eventData.videoObject.videotype;
+	let currentTime;
+	let duration;
+	let title;
+	let src;
+	let provider = "MediaLibrary";
+
+	if (videoType == "upload") {
+		currentTime = eventData.videoObject?.videoplayer?.currentTime;
+		duration = eventData.videoObject?.videoplayer?.duration;
+		src = eventData.videoObject?.videoplayer?.src;
+		title = src?.split("/").pop();
+	}
+	if (videoType == "youtube") {
+		provider = "YouTube";
+		currentTime = eventData.videoObject?.youtubeplayer?.getCurrentTime();
+		duration = eventData.videoObject?.youtubeplayer?.getDuration();
+		title = eventData.videoObject.youtubeplayer?.videoTitle;
+		src = eventData.videoObject.youtubeplayer.getVideoUrl();
+	}
+	if (videoType == "vimeo") {
+		provider = "Vimeo";
+		src = eventData.videoObject?.vimeoplayer?.src;
+	}
+	if (src.includes("imagekit")) {
+		provider = "ImageKit";
+	}
+
 	const timeDiv = Math.floor((currentTime / duration) * 100);
 	let percent;
 	if (timeDiv < 25 || !duration) {
@@ -24,7 +54,6 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 		percent = 100;
 	}
 
-	let src = eventData.videoObject?.videoplayer?.src;
 	let status = eventData.eventname;
 	if (eventData.eventname == "play") {
 		status = "start";
@@ -34,21 +63,8 @@ export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 	}
 	const autoplay = eventData.videoObject.autoplay;
 	const loop = eventData.videoObject.loop;
-	let title = src?.split("/").pop();
-	let provider = "MediaLibrary";
 	if (eventData.eventname == "pause" && currentTime == duration) {
 		return;
-	}
-	if (eventData.videoObject.videoplayer.src.includes("imagekit")) {
-		provider = "ImageKit";
-	}
-
-	if (eventData.videoObject.videoplayer.src.includes("youtube")) {
-		provider = "YouTube";
-	}
-
-	if (eventData.videoObject.videoplayer.src.includes("vimeo")) {
-		provider = "Vimeo";
 	}
 
 	const dataObj = {

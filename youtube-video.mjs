@@ -3,6 +3,7 @@ import {
 	stopVideos,
 	revealVideoElement,
 	hideVideoElement,
+	dataLayerPush,
 } from "./vcUtils.mjs";
 
 const players = new Map();
@@ -51,6 +52,7 @@ async function triggerYoutube(videoObject) {
 async function initializePlayer(videoObject) {
 	const playerId = videoObject.playerId;
 	const player = createYouTubePlayer(videoObject);
+	videoObject.youtubeplayer = player;
 	players.set(playerId, { initialized: true, player, videoObject });
 }
 
@@ -88,10 +90,17 @@ function onPlayerStateChange(event, videoObject) {
 			globalSettings.enableDebugLogs && console.log("Playing the video");
 			stopVideos(videoObject);
 			revealVideoElement(videoObject);
+			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "play", videoObject });
+			}
 			break;
 		case YT.PlayerState.PAUSED:
 			globalSettings.enableDebugLogs && console.log("Pausing the video");
+			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "pause", videoObject });
+			}
 			break;
+
 		case YT.PlayerState.ENDED:
 			if (videoObject.loop) {
 				const player = players.get(videoObject.playerId).player;
@@ -100,6 +109,9 @@ function onPlayerStateChange(event, videoObject) {
 			}
 			globalSettings.enableDebugLogs && console.log("Video ended");
 			hideVideoElement(videoObject);
+			if (videoObject.dataLayerPush) {
+				dataLayerPush({ eventname: "ended", videoObject });
+			}
 			break;
 	}
 }

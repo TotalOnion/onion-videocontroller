@@ -47,13 +47,11 @@ function uploadedVideoInit(videoObject) {
 		revealVideoElement(videoObject, false);
 		if (videoObject.dataLayerPush) {
 			videoPlayer.addEventListener("durationchange", () => {
-				console.log("duration change");
 				dataLayerPush({ eventname: "play", videoObject });
 			});
 		}
 	});
-	videoPlayer.addEventListener("pause", (e) => {
-		const target = e.target;
+	videoPlayer.addEventListener("pause", () => {
 		if (videoObject.dataLayerPush) {
 			dataLayerPush({ eventname: "pause", videoObject });
 		}
