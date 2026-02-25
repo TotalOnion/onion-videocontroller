@@ -1,10 +1,6 @@
 const enableDebugLogs = true;
 
 export function dataLayerPush(eventData = { eventname: "", videoObject }) {
-	console.log(
-		"🚀 ~ dataLayerPush ~ eventData.videoObject:",
-		eventData.videoObject
-	);
 	const videoType = eventData.videoObject.videotype;
 	let currentTime;
 	let duration;
