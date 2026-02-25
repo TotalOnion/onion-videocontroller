@@ -46,12 +46,17 @@ function uploadedVideoInit(videoObject) {
 		stopVideos(videoObject);
 		revealVideoElement(videoObject, false);
 		if (videoObject.dataLayerPush) {
-			videoPlayer.addEventListener("durationchange", () => {
+			if (!videoPlayer.duration) {
+				videoPlayer.addEventListener("durationchange", () => {
+					dataLayerPush({ eventname: "play", videoObject });
+				});
+			} else {
 				dataLayerPush({ eventname: "play", videoObject });
-			});
+			}
 		}
 	});
-	videoPlayer.addEventListener("pause", () => {
+	videoPlayer.addEventListener("pause", (e) => {
+		const target = e.target;
 		if (videoObject.dataLayerPush) {
 			dataLayerPush({ eventname: "pause", videoObject });
 		}
