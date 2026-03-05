@@ -1,4 +1,4 @@
-const enableDebugLogs = true;
+const enableDebugLogs = false;
 
 export function dataLayerPush(eventData = { eventname: "", videoObject }) {
 	const videoType = eventData.videoObject.videotype;
