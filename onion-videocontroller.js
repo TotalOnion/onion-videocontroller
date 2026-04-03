@@ -104,7 +104,12 @@ export default class videoController {
 					vimeoVideo.vimeoInit(videoObject);
 				}
 			}
-			const triggers = document.querySelectorAll(
+			let scopeEl = container.parentElement;
+			while (scopeEl && !scopeEl.hasAttribute('parentcontainer')) {
+				scopeEl = scopeEl.parentElement;
+			}
+			const triggerScope = scopeEl ?? document;
+			const triggers = triggerScope.querySelectorAll(
 				`[data-triggerid='${container.dataset?.videoid}']`
 			);
 
