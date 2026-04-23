@@ -104,10 +104,20 @@ export default class videoController {
 					vimeoVideo.vimeoInit(videoObject);
 				}
 			}
+
+			if (this.containerCollection[videoObject.videoid]) {
+				let suffix = 1;
+				while (this.containerCollection[videoObject.videoid]) {
+					videoObject.videoid = videoObject.videoid + '-' + suffix;
+					suffix++;
+				}
+			}
+
 			let scopeEl = container.parentElement;
 			while (scopeEl && !scopeEl.hasAttribute('parentcontainer')) {
 				scopeEl = scopeEl.parentElement;
 			}
+
 			const triggerScope = scopeEl ?? document;
 			const triggers = triggerScope.querySelectorAll(
 				`[data-triggerid='${container.dataset?.videoid}']`
@@ -133,6 +143,7 @@ export default class videoController {
 						);
 					return;
 				}
+				trigger.dataset.triggerid = videoObject.videoid;
 				trigger.addEventListener('click', () => {
 					this.triggerVideo(
 						this.containerCollection[trigger.dataset.triggerid]
