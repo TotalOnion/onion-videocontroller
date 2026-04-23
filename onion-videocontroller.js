@@ -90,21 +90,6 @@ export default class videoController {
 				globalSettings: this.getGlobalSettings()
 			};
 
-			if (!videoObject.videoReadyState) {
-				if (videoObject.autoplay == 1) {
-					this.loadingSpinner(videoObject);
-				}
-				if (videoObject.videotype === 'upload') {
-					uploadVideo.uploadedVideoInit(videoObject);
-				}
-				if (videoObject.videotype === 'youtube') {
-					youtubeVideo.youtubeInit(videoObject);
-				}
-				if (videoObject.videotype === 'vimeo') {
-					vimeoVideo.vimeoInit(videoObject);
-				}
-			}
-
 			if (this.containerCollection[videoObject.videoid]) {
 				let suffix = 1;
 				while (this.containerCollection[videoObject.videoid]) {
@@ -152,6 +137,23 @@ export default class videoController {
 			});
 			videoObject.trigger = triggers;
 			this.containerCollection[videoObject.videoid] = videoObject;
+
+			if (!videoObject.videoReadyState) {
+				if (videoObject.autoplay == 1) {
+					this.loadingSpinner(videoObject);
+				}
+				if (videoObject.videotype === 'upload') {
+					console.log('id', videoObject.videoid);
+
+					uploadVideo.uploadedVideoInit(videoObject);
+				}
+				if (videoObject.videotype === 'youtube') {
+					youtubeVideo.youtubeInit(videoObject);
+				}
+				if (videoObject.videotype === 'vimeo') {
+					vimeoVideo.vimeoInit(videoObject);
+				}
+			}
 		});
 	}
 	setVideoReadyState(videoObject, isLoaded) {

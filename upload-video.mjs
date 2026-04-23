@@ -20,7 +20,7 @@ function uploadedVideoInit(videoObject) {
 	globalSettings.enableDebugLogs && console.log("running uploaded init");
 
 	const videoPlayer = videocontainer.querySelector(
-		".cblvc-video-container__video-player"
+		".cblvc-video-container__video-player",
 	);
 	videoObject.videoplayer = videoPlayer;
 	videoObject.elementType = "video";
@@ -43,7 +43,9 @@ function uploadedVideoInit(videoObject) {
 
 	videoPlayer.addEventListener("play", () => {
 		videoObject.instance.setVideoReadyState(videoObject, true);
-		stopVideos(videoObject);
+		if (!autoplay) {
+			stopVideos(videoObject);
+		}
 		revealVideoElement(videoObject, false);
 		if (videoObject.dataLayerPush) {
 			if (!videoPlayer.duration) {
@@ -139,13 +141,13 @@ function triggerUploadedVideo(videoObject) {
 				modalVideoElement,
 				sources,
 				currentSource,
-				videoObject
+				videoObject,
 			);
 		});
 		togglePlay(videoObject);
 	} else {
 		const videoPlayer = videocontainer.querySelector(
-			".cblvc-video-container__video-player"
+			".cblvc-video-container__video-player",
 		);
 		globalSettings.enableDebugLogs && console.log("triggering inline video");
 		let currentSource = setSrc(videoPlayer, sources, false, videoObject);
@@ -171,7 +173,7 @@ function togglePlay(videoObject) {
 		videoPlayer = modalcontainer.querySelector("video");
 	} else {
 		videoPlayer = videocontainer.querySelector(
-			".cblvc-video-container__video-player"
+			".cblvc-video-container__video-player",
 		);
 	}
 	if (videoPlayer.paused) {
