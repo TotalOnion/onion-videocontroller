@@ -144,7 +144,7 @@ export function revealVideoElement(videoObject) {
 		modalcontainer.classList.add("video-playing");
 	} else {
 		document.body.classList.add("video-playing");
-		addTriggerClass(videoid, "video-playing");
+		addTriggerClass(videoObject, "video-playing");
 		if (parentcontainer) {
 			parentcontainer.classList.add("video-playing");
 		}
@@ -216,16 +216,18 @@ export function stopVideos(videoObject, stopEverything = false) {
 	});
 }
 
-export function removeTriggerClass(triggerid, classname) {
-	document
-		.querySelectorAll(`[data-triggerid="${triggerid}"]`)
+export function removeTriggerClass(videoObject, classname) {
+	const { videoid, triggerScope } = videoObject;
+	triggerScope
+		.querySelectorAll(`[data-triggerid="${videoid}"]`)
 		.forEach((trigger) => {
 			trigger.classList.remove(classname);
 		});
 }
-export function addTriggerClass(triggerid, classname) {
-	document
-		.querySelectorAll(`[data-triggerid="${triggerid}"]`)
+export function addTriggerClass(videoObject, classname) {
+	const { videoid, triggerScope } = videoObject;
+	triggerScope
+		.querySelectorAll(`[data-triggerid="${videoid}"]`)
 		.forEach((trigger) => {
 			trigger.classList.add(classname);
 		});

@@ -108,6 +108,8 @@ export default class videoController {
 				`[data-triggerid='${container.dataset?.videoid}']`
 			);
 
+			videoObject.triggerScope = triggerScope;
+
 			if (triggers.length === 0) {
 				this.enableDebugLogs &&
 					console.log(
