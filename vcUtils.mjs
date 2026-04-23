@@ -140,7 +140,7 @@ export function revealVideoElement(videoObject) {
 	} = videoObject;
 	if (modal && !isAdmin) {
 		document.documentElement.classList.add("modal-video-playing");
-		addTriggerClass(videoid, "video-playing");
+		addTriggerClass(videoObject, "video-playing");
 		modalcontainer.classList.add("video-playing");
 	} else {
 		document.body.classList.add("video-playing");
@@ -168,14 +168,14 @@ export function hideVideoElement(videoObject) {
 			modalcontainer.remove();
 		}, 1000);
 		videoObject.youtubeplayer = false;
-		removeTriggerClass(videoid, "video-playing");
+		removeTriggerClass(videoObject, "video-playing");
 	} else {
 		document.body.classList.remove("video-playing");
 		if (parentcontainer) {
 			parentcontainer.classList.remove("video-playing");
 		}
 		videocontainer.classList.remove("video-playing");
-		removeTriggerClass(videoid, "video-playing");
+		removeTriggerClass(videoObject, "video-playing");
 	}
 }
 export function stopVideos(videoObject, stopEverything = false) {
