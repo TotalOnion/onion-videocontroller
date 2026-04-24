@@ -115,7 +115,6 @@ export default class videoController {
 					console.log(
 						`could not find any triggers in ${parentContainer}`
 					);
-				return;
 			}
 
 			triggers.forEach((trigger) => {
