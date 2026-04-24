@@ -119,23 +119,20 @@ export default class videoController {
 			}
 
 			triggers.forEach((trigger) => {
-				if (!trigger) {
-					return;
-				}
-				if (!trigger?.dataset?.triggerid) {
+				if (trigger?.dataset?.triggerid) {
+					trigger.dataset.triggerid = videoObject.videoid;
+					trigger.addEventListener('click', () => {
+						this.triggerVideo(
+							this.containerCollection[trigger.dataset.triggerid]
+						);
+					});
+				} else {
 					this.enableDebugLogs &&
 						console.log(
 							trigger,
 							`was missing an id so the listener could not be attached`
 						);
-					return;
 				}
-				trigger.dataset.triggerid = videoObject.videoid;
-				trigger.addEventListener('click', () => {
-					this.triggerVideo(
-						this.containerCollection[trigger.dataset.triggerid]
-					);
-				});
 			});
 			videoObject.trigger = triggers;
 			this.containerCollection[videoObject.videoid] = videoObject;
