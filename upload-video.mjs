@@ -114,7 +114,7 @@ function uploadedVideoInit(videoObject) {
 		}
 	});
 
-	if (videoObject.autoplay && videoObject.muted) {
+	if (videoObject.autoplay) {
 		triggerUploadedVideo(videoObject);
 	}
 }
@@ -165,6 +165,8 @@ function togglePlay(videoObject) {
 		isAdmin,
 		modalcontainer,
 		modal,
+		muted,
+		autoplay,
 		globalSettings,
 	} = videoObject;
 	globalSettings.enableDebugLogs && console.log("running togglePlay");
@@ -177,6 +179,9 @@ function togglePlay(videoObject) {
 		);
 	}
 	if (videoPlayer.paused) {
+		if (autoplay) {
+			videoPlayer.muted = true;
+		}
 		if (fullscreen && !isAdmin) {
 			document.addEventListener("fullscreenchange", () => {
 				if (
